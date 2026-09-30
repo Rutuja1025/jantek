@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Automatic Printing System</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                #f4f7fb;
+
+            color: #172033;
+        }
+
+        .topbar {
+            background:
+                linear-gradient(
+                    135deg,
+                    #16213e,
+                    #263b73
+                );
+
+            color: white;
+
+            padding: 22px 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            box-shadow:
+                0 4px 16px
+                rgba(0, 0, 0, 0.12);
+        }
+
+        .brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,0.15);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+        }
+
+        .brand h1 {
+            margin: 0;
+
+            font-size: 21px;
+
+            font-weight: 650;
+        }
+
+        .brand p {
+            margin: 3px 0 0;
+
+            font-size: 12px;
+
+            opacity: 0.75;
+        }
+
+        .container {
+            width: min(
+                1400px,
+                calc(100% - 40px)
+            );
+
+            margin: 30px auto 50px;
+        }
+
+        .section-title {
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+
+            font-size: 20px;
+        }
+
+        .section-title p {
+            margin: 5px 0 0;
+
+            color: #718096;
+
+            font-size: 13px;
+        }
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(430px, 1fr)
+                );
+
+            gap: 22px;
+
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: white;
+
+            border: 1px solid #e7ebf2;
+
+            border-radius: 16px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(25, 42, 70, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .card-header h3 {
+            margin: 0;
+
+            font-size: 17px;
+        }
+
+        .card-header span {
+            font-size: 12px;
+
+            color: #718096;
+        }
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+
+            gap: 15px;
+        }
+
+        .field {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 12px;
+
+            color: #566277;
+
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border:
+                1px solid #dce2eb;
+
+            border-radius: 9px;
+
+            background: #fff;
+
+            color: #1f2937;
+
+            outline: none;
+
+            font-size: 13px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #5069c7;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(80,105,199,0.10);
+        }
+
+        .file-input {
+            padding: 8px;
+        }
+
+        .options {
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+        .option {
+            border:
+                1px solid #dce2eb;
+
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            background: #fafbfc;
+
+            font-size: 12px;
+
+            color: #566277;
+        }
+
+        .checkbox-row {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            height: 40px;
+        }
+
+        .checkbox-row input {
+            width: auto;
+        }
+
+        .btn {
+            border: none;
+
+            border-radius: 9px;
+
+            padding: 11px 18px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition:
+                transform .15s,
+                opacity .15s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background:
+                #425cc7;
+
+            color: white;
+        }
+
+        .btn-secondary {
+            background:
+                #edf1f8;
+
+            color: #364152;
+        }
+
+        .btn-danger {
+            background:
+                #fff0f0;
+
+            color: #c53030;
+        }
+
+        .form-actions {
+            margin-top: 18px;
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+        }
+
+        .table-card {
+            background: white;
+
+            border:
+                1px solid #e7ebf2;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 5px 20px
+                rgba(25, 42, 70, 0.05);
+
+            margin-bottom: 28px;
+        }
+
+        .table-header {
+            padding: 20px 22px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            border-bottom:
+                1px solid #edf0f5;
+        }
+
+        .table-header h3 {
+            margin: 0;
+
+            font-size: 17px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 850px;
+        }
+
+        th {
+            text-align: left;
+
+            padding: 12px 18px;
+
+            background: #f8fafc;
+
+            color: #697586;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .04em;
+        }
+
+        td {
+            padding: 14px 18px;
+
+            border-top:
+                1px solid #eef1f5;
+
+            font-size: 12px;
+
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #fbfcfe;
+        }
+
+        .filename {
+            max-width: 260px;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+            font-weight: 600;
+
+            color: #26344d;
+        }
+
+        .subtext {
+            font-size: 11px;
+
+            color: #8994a5;
+
+            margin-top: 3px;
+        }
+
+        .badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+        .badge-success {
+            background: #e8f7ee;
+
+            color: #21864a;
+        }
+
+        .badge-failed {
+            background: #fff0f0;
+
+            color: #c53030;
+        }
+
+        .badge-manual {
+            background: #eef3ff;
+
+            color: #425cc7;
+        }
+
+        .badge-file {
+            background: #f1f5f9;
+
+            color: #526172;
+        }
+
+        .badge-schedule {
+            background: #fff7e6;
+
+            color: #a86a00;
+        }
+
+        .empty {
+            text-align: center;
+
+            padding: 35px;
+
+            color: #8a95a6;
+
+            font-size: 13px;
+        }
+
+        .schedule-active {
+            color: #21864a;
+
+            font-weight: 700;
+        }
+
+        .schedule-disabled {
+            color: #9aa3b1;
+
+            font-weight: 600;
+        }
+
+        .action-group {
+            display: flex;
+
+            gap: 7px;
+        }
+
+        .small-btn {
+            border: none;
+
+            border-radius: 7px;
+
+            padding: 7px 10px;
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+        .toggle-btn {
+            background: #edf1f8;
+
+            color: #40506a;
+        }
+
+        .delete-btn {
+            background: #fff0f0;
+
+            color: #c53030;
+        }
+
+        .toast {
+            position: fixed;
+
+            right: 24px;
+
+            bottom: 24px;
+
+            background: #202a3a;
+
+            color: white;
+
+            padding: 13px 17px;
+
+            border-radius: 10px;
+
+            font-size: 12px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,.20);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transform:
+                translateY(10px);
+
+            transition:
+                .25s ease;
+
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+
+            transform:
+                translateY(0);
+        }
+
+        .toast.success {
+            background: #21864a;
+        }
+
+        .toast.error {
+            background: #c53030;
+        }
+
+        .footer {
+            text-align: center;
+
+            color: #9aa3b1;
+
+            font-size: 11px;
+
+            margin-top: 35px;
+        }
+
+        @media(max-width: 700px) {
+
+            .topbar {
+                padding: 18px 20px;
+            }
+
+            .container {
+                width:
+                    calc(100% - 24px);
+
+                margin-top: 20px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🖨
+            </div>
+
+            <div>
+
+                <h1>
+                    Automatic Printing System
+                </h1>
+
+                <p>
+                    Printer management, scheduling and job monitoring
+                </p>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+
+        <!-- PRINT FORMS -->
+
+        <div class="section-title">
+
+            <h2>
+                Print Management
+            </h2>
+
+            <p>
+                Send documents to the selected printer manually
+                or configure automatic schedules.
+            </p>
+
+        </div>
+
+
+        <div class="grid">
+
+
+            <!-- MANUAL PRINT -->
+
+            <section class="card">
+
+                <div class="card-header">
+
+                    <h3>
+                        Print Now
+                    </h3>
+
+                    <span>
+                        Manual printing
+                    </span>
+
+                </div>
+
+
+                <form id="printForm">
+
+                    <div class="form-grid">
+
+
+                        <div class="field full">
+
+                            <label>
+                                Document
+                            </label>
+
+                            <input
+                                class="file-input"
+                                type="file"
+                                id="printFile"
+                                name="file"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Printer
+                            </label>
+
+                            <select
+                                id="printer"
+                                name="printer"
+                                required
+                            >
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Copies
+                            </label>
+
+                            <input
+                                type="number"
+                                id="copies"
+                                name="copies"
+                                min="1"
+                                max="99"
+                                value="1"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Paper size
+                            </label>
+
+                            <select
+                                name="paper_size"
+                            >
+
+                                <option value="A4">
+                                    A4
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Orientation
+                            </label>
+
+                            <select
+                                name="orientation"
+                            >
+
+                                <option value="Portrait">
+                                    Portrait
+                                </option>
+
+                                <option value="Landscape">
+                                    Landscape
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Color
+                            </label>
+
+                            <select
+                                name="color_mode"
+                            >
+
+                                <option value="Color">
+                                    Color
+                                </option>
+
+                                <option value="B&W">
+                                    Black & White
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Duplex
+                            </label>
+
+                            <div class="checkbox-row">
+
+                                <input
+                                    type="checkbox"
+                                    name="duplex"
+                                    value="true"
+                                >
+
+                                <span>
+                                    Double-sided
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Print Now
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- SCHEDULE -->
+
+            <section class="card">
+
+                <div class="card-header">
+
+                    <h3>
+                        Add Schedule
+                    </h3>
+
+                    <span>
+                        Automatic printing
+                    </span>
+
+                </div>
+
+
+                <form id="scheduleForm">
+
+                    <div class="form-grid">
+
+
+                        <div class="field full">
+
+                            <label>
+                                Document
+                            </label>
+
+                            <input
+                                class="file-input"
+                                type="file"
+                                id="scheduleFile"
+                                name="file"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Printer
+                            </label>
+
+                            <select
+                                id="schedulePrinter"
+                                name="printer"
+                                required
+                            >
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Time
+                            </label>
+
+                            <input
+                                type="time"
+                                name="print_time"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Days
+                            </label>
+
+                            <select
+                                name="days"
+                            >
+
+                                <option value="daily">
+                                    Every day
+                                </option>
+
+                                <option value="monday">
+                                    Monday
+                                </option>
+
+                                <option value="tuesday">
+                                    Tuesday
+                                </option>
+
+                                <option value="wednesday">
+                                    Wednesday
+                                </option>
+
+                                <option value="thursday">
+                                    Thursday
+                                </option>
+
+                                <option value="friday">
+                                    Friday
+                                </option>
+
+                                <option value="saturday">
+                                    Saturday
+                                </option>
+
+                                <option value="sunday">
+                                    Sunday
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Copies
+                            </label>
+
+                            <input
+                                type="number"
+                                name="copies"
+                                min="1"
+                                max="99"
+                                value="1"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Paper size
+                            </label>
+
+                            <select
+                                name="paper_size"
+                            >
+
+                                <option value="A4">
+                                    A4
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Orientation
+                            </label>
+
+                            <select
+                                name="orientation"
+                            >
+
+                                <option value="Portrait">
+                                    Portrait
+                                </option>
+
+                                <option value="Landscape">
+                                    Landscape
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Color
+                            </label>
+
+                            <select
+                                name="color_mode"
+                            >
+
+                                <option value="Color">
+                                    Color
+                                </option>
+
+                                <option value="B&W">
+                                    Black & White
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Duplex
+                            </label>
+
+                            <div class="checkbox-row">
+
+                                <input
+                                    type="checkbox"
+                                    name="duplex"
+                                    value="true"
+                                >
+
+                                <span>
+                                    Double-sided
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Create Schedule
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+
+        <!-- SCHEDULE TABLE -->
+
+        <section class="table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <h3>
+                        Scheduled Jobs
+                    </h3>
+
+                </div>
+
+                <span
+                    id="scheduleCount"
+                    class="subtext"
+                >
+                    0 schedules
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Document
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Days
+                            </th>
+
+                            <th>
+                                Printer
+                            </th>
+
+                            <th>
+                                Settings
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="scheduleTable"
+                    >
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECENT JOBS -->
+
+        <section class="table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <h3>
+                        Recent Print Jobs
+                    </h3>
+
+                    <div class="subtext">
+                        Latest printing activity
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Document
+                            </th>
+
+                            <th>
+                                Printer
+                            </th>
+
+                            <th>
+                                Trigger
+                            </th>
+
+                            <th>
+                                Settings
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date & Time
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="jobsTable"
+                    >
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <div class="footer">
+
+            Automatic Printing System
+
+        </div>
+
+
+    </main>
+
+
+    <div
+        id="toast"
+        class="toast"
+    >
+    </div>
+
+
+<script>
+
+
+function showToast(
+    message,
+    type = "success"
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+    toast.textContent =
+        message;
+
+    toast.className =
+        "toast show " + type;
+
+    setTimeout(
+        () => {
+            toast.className =
+                "toast";
+        },
+        3500
+    );
+}
+
+
+function fileName(
+    path
+) {
+
+    if (!path) {
+        return "-";
+    }
+
+    return path
+        .split("\\")
+        .pop()
+        .split("/")
+        .pop();
+}
+
+
+function escapeHtml(
+    value
+) {
+
+    if (value === null ||
+        value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+async function loadPrinters() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/printers"
+            );
+
+        const data =
+            await response.json();
+
+        const printerSelect =
+            document.getElementById(
+                "printer"
+            );
+
+        const schedulePrinter =
+            document.getElementById(
+                "schedulePrinter"
+            );
+
+        printerSelect.innerHTML = "";
+        schedulePrinter.innerHTML = "";
+
+        data.printers.forEach(
+            printer => {
+
+                const option1 =
+                    document.createElement(
+                        "option"
+                    );
+
+                option1.value =
+                    printer;
+
+                option1.textContent =
+                    printer;
+
+                printerSelect.appendChild(
+                    option1
+                );
+
+
+                const option2 =
+                    document.createElement(
+                        "option"
+                    );
+
+                option2.value =
+                    printer;
+
+                option2.textContent =
+                    printer;
+
+                schedulePrinter.appendChild(
+                    option2
+                );
+
+            }
+        );
+
+        if (data.default) {
+
+            printerSelect.value =
+                data.default;
+
+            schedulePrinter.value =
+                data.default;
+        }
+
+    } catch (error) {
+
+        showToast(
+            "Could not load printers",
+            "error"
+        );
+
+    }
+}
+
+
+// ---------------------------------------------------------
+// Manual print
+// ---------------------------------------------------------
+
+document
+    .getElementById("printForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const formData =
+                new FormData(this);
+
+            const button =
+                this.querySelector(
+                    "button[type=submit]"
+                );
+
+            button.disabled = true;
+
+            button.textContent =
+                "Printing...";
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/print",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                const data =
+                    await response.json();
+
+                if (data.ok) {
+
+                    showToast(
+                        data.message ||
+                        "Print completed successfully"
+                    );
+
+                    this.reset();
+
+                    loadPrinters();
+
+                    loadJobs();
+
+                } else {
+
+                    showToast(
+                        data.error ||
+                        "Printing failed",
+                        "error"
+                    );
+                }
+
+            } catch (error) {
+
+                showToast(
+                    error.message,
+                    "error"
+                );
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Print Now";
+            }
+
+        }
+    );
+
+
+// ---------------------------------------------------------
+// Schedule
+// ---------------------------------------------------------
+
+document
+    .getElementById("scheduleForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const formData =
+                new FormData(this);
+
+            const button =
+                this.querySelector(
+                    "button[type=submit]"
+                );
+
+            button.disabled = true;
+
+            button.textContent =
+                "Creating...";
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/schedules",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                const data =
+                    await response.json();
+
+                if (data.ok) {
+
+                    showToast(
+                        "Schedule created successfully"
+                    );
+
+                    this.reset();
+
+                    loadPrinters();
+
+                    loadSchedules();
+
+                } else {
+
+                    showToast(
+                        data.error ||
+                        "Could not create schedule",
+                        "error"
+                    );
+
+                }
+
+            } catch (error) {
+
+                showToast(
+                    error.message,
+                    "error"
+                );
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Create Schedule";
+            }
+
+        }
+    );
+
+
+// ---------------------------------------------------------
+// Load schedules
+// ---------------------------------------------------------
+
+async function loadSchedules() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/schedules"
+            );
+
+        const data =
+            await response.json();
+
+        const table =
+            document.getElementById(
+                "scheduleTable"
+            );
+
+        table.innerHTML = "";
+
+        const schedules =
+            data.schedules || [];
+
+        document.getElementById(
+            "scheduleCount"
+        ).textContent =
+            `${schedules.length} schedule${schedules.length === 1 ? "" : "s"}`;
+
+
+        if (schedules.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7"
+                        class="empty">
+                        No scheduled jobs yet
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        schedules.forEach(
+            schedule => {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+                const statusClass =
+                    schedule.enabled
+                        ? "schedule-active"
+                        : "schedule-disabled";
+
+                const statusText =
+                    schedule.enabled
+                        ? "Active"
+                        : "Disabled";
+
+
+                const settings =
+                    `${schedule.copies} copy${schedule.copies > 1 ? "ies" : ""} · ` +
+                    `${schedule.paper_size} · ` +
+                    `${schedule.orientation} · ` +
+                    `${schedule.color_mode}` +
+                    `${schedule.duplex ? " · Duplex" : ""}`;
+
+
+                row.innerHTML = `
+
+                    <td>
+
+                        <div
+                            class="filename"
+                            title="${escapeHtml(schedule.file_path)}"
+                        >
+                            ${escapeHtml(
+                                fileName(
+                                    schedule.file_path
+                                )
+                            )}
+                        </div>
+
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(
+                                schedule.print_time
+                            )}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            schedule.days
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            schedule.printer
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            settings
+                        )}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="${statusClass}"
+                        >
+                            ${statusText}
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <div
+                            class="action-group"
+                        >
+
+                            <button
+                                class="small-btn toggle-btn"
+                                onclick="toggleSchedule(${schedule.id})"
+                            >
+                                ${schedule.enabled
+                                    ? "Disable"
+                                    : "Enable"}
+                            </button>
+
+                            <button
+                                class="small-btn delete-btn"
+                                onclick="deleteSchedule(${schedule.id})"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </td>
+                `;
+
+                table.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+}
+
+
+// ---------------------------------------------------------
+// Toggle schedule
+// ---------------------------------------------------------
+
+async function toggleSchedule(
+    id
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/schedules/${id}/toggle`,
+                {
+                    method: "POST"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (data.ok) {
+
+            showToast(
+                "Schedule updated"
+            );
+
+            loadSchedules();
+
+        } else {
+
+            showToast(
+                data.error ||
+                "Could not update schedule",
+                "error"
+            );
+
+        }
+
+    } catch (error) {
+
+        showToast(
+            error.message,
+            "error"
+        );
+
+    }
+}
+
+
+// ---------------------------------------------------------
+// Delete schedule
+// ---------------------------------------------------------
+
+async function deleteSchedule(
+    id
+) {
+
+    if (!confirm(
+        "Delete this schedule?"
+    )) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/schedules/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (data.ok) {
+
+            showToast(
+                "Schedule deleted"
+            );
+
+            loadSchedules();
+
+        } else {
+
+            showToast(
+                data.error ||
+                "Could not delete schedule",
+                "error"
+            );
+
+        }
+
+    } catch (error) {
+
+        showToast(
+            error.message,
+            "error"
+        );
+
+    }
+}
+
+
+// ---------------------------------------------------------
+// Recent jobs
+// ---------------------------------------------------------
+
+async function loadJobs() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/jobs"
+            );
+
+        const data =
+            await response.json();
+
+        const table =
+            document.getElementById(
+                "jobsTable"
+            );
+
+        table.innerHTML = "";
+
+        const jobs =
+            data.jobs || [];
+
+
+        if (jobs.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="6"
+                        class="empty">
+                        No print jobs yet
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        jobs.forEach(
+            job => {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                let triggerClass =
+                    "badge-file";
+
+                if (
+                    job.trigger_type ===
+                    "manual"
+                ) {
+                    triggerClass =
+                        "badge-manual";
+                }
+
+                if (
+                    job.trigger_type ===
+                    "schedule"
+                ) {
+                    triggerClass =
+                        "badge-schedule";
+                }
+
+
+                const statusClass =
+                    job.status ===
+                    "Success"
+                        ? "badge-success"
+                        : "badge-failed";
+
+
+                const trigger =
+                    job.trigger_type
+                        ? job.trigger_type
+                            .charAt(0)
+                            .toUpperCase() +
+                          job.trigger_type
+                            .slice(1)
+                        : "-";
+
+
+                const settings =
+                    `${job.copies} copy${job.copies > 1 ? "ies" : ""} · ` +
+                    `${job.paper_size || "A4"} · ` +
+                    `${job.orientation || "Portrait"} · ` +
+                    `${job.color_mode || "Color"}` +
+                    `${job.duplex ? " · Duplex" : ""}`;
+
+
+                const date =
+                    job.created_at
+                        ? new Date(
+                            job.created_at
+                        ).toLocaleString()
+                        : "-";
+
+
+                row.innerHTML = `
+
+                    <td>
+
+                        <div
+                            class="filename"
+                            title="${escapeHtml(job.file_path)}"
+                        >
+                            ${escapeHtml(
+                                fileName(
+                                    job.file_path
+                                )
+                            )}
+                        </div>
+
+                        ${
+                            job.error
+                                ? `
+                                    <div
+                                        class="subtext"
+                                        title="${escapeHtml(job.error)}"
+                                    >
+                                        ${escapeHtml(
+                                            job.error
+                                        )}
+                                    </div>
+                                `
+                                : ""
+                        }
+
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            job.printer
+                        )}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="badge ${triggerClass}"
+                        >
+                            ${escapeHtml(
+                                trigger
+                            )}
+                        </span>
+
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            settings
+                        )}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="badge ${statusClass}"
+                        >
+                            ${escapeHtml(
+                                job.status
+                            )}
+                        </span>
+
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            date
+                        )}
+                    </td>
+
+                `;
+
+                table.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+}
+
+
+// ---------------------------------------------------------
+// Initial load
+// ---------------------------------------------------------
+
+loadPrinters();
+
+loadSchedules();
+
+loadJobs();
+
+
+// Refresh dashboard data
+setInterval(
+    loadSchedules,
+    10000
+);
+
+setInterval(
+    loadJobs,
+    5000
+);
+
+</script>
+
+</body>
+
+</html>
